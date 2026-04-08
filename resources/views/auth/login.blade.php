@@ -27,7 +27,13 @@
 
             <a href="{{route('auth.redirect')}}"
                 class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded block text-center">
-                Iniciar sesión con Facebook
+                <i class="fa-brands fa-facebook-f"></i>&nbsp; Iniciar sesión con Facebook
+            </a>
+
+            <a href="{{route('auth.google_redirect')}}"
+                class="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded block text-center">
+                <!-- <i class="fa-brands fa-square-google-plus"></i> -->
+                <i class="fa-brands fa-google-plus-g margin: 0 200px 0 0 "></i>&nbsp; Iniciar sesión con Google
             </a>
 
             <div class="block mt-4">

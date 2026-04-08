@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Socialite;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -17,18 +19,68 @@ class AuthController extends Controller
     public function callback()
     {
         $userFacebook = Socialite::driver('facebook')->user();
-        // $user = Socialite::driver('facebook')->stateless()->user();
 
-        $user = User::firstOrCreate([
+        $user = User::updateOrCreate([
             'email' => $userFacebook->getEmail(),
-            'provider' => 'Facebook',
         ], [
             'name' => $userFacebook->getName(),
-            'password' => '',
+            'password' => Hash::make(Str::password(12)),
             'provider_id' => $userFacebook->getId(),
             'avatar' => $userFacebook->getAvatar(),
             'nick_name' => $userFacebook->getNickname(),
         ]);
+
+        // dd($user);
+
+        $provedor = $user->providers()->firstOrCreate(
+            [
+                'email' => $userFacebook->getEmail(),
+                'provider' => 'Facebook',
+            ],
+            [
+                'name' => $userFacebook->getName(),
+                'provider_id' => $userFacebook->getId(),
+                'avatar' => $userFacebook->getAvatar(),
+                'nick_name' => $userFacebook->getNickname(),
+            ]
+        );
+
+        auth()->login($user);
+
+        return redirect()->to('/dashboard');
+    }
+
+    public function google_redirect()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function google_callback()
+    {
+        $userGoogle = Socialite::driver('google')->stateless()->user();
+
+        $user = User::updateOrCreate([
+            'email' => $userGoogle->getEmail(),
+        ], [
+            'name' => $userGoogle->getName(),
+            'password' => Hash::make(Str::password(12)),
+            'provider_id' => $userGoogle->getId(),
+            'avatar' => $userGoogle->getAvatar(),
+            'nick_name' => $userGoogle->getNickname(),
+        ]);
+
+        $provedor = $user->providers()->firstOrCreate(
+            [
+                'email' => $userGoogle->getEmail(),
+                'provider' => 'google',
+            ],
+            [
+                'name' => $userGoogle->getName(),
+                'provider_id' => $userGoogle->getId(),
+                'avatar' => $userGoogle->getAvatar(),
+                'nick_name' => $userGoogle->getNickname(),
+            ]
+        );
 
         auth()->login($user);
 
