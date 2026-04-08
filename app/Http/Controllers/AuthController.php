@@ -86,4 +86,42 @@ class AuthController extends Controller
 
         return redirect()->to('/dashboard');
     }
+
+    public function x_redirect()
+    {
+        return Socialite::driver('x')->redirect();
+    }
+
+
+    public function x_callback()
+    {
+        $userX = Socialite::driver('x')->stateless()->user();
+
+        $user = User::updateOrCreate([
+            'email' => $userX->getEmail(),
+        ], [
+            'name' => $userX->getName(),
+            'password' => Hash::make(Str::password(12)),
+            'provider_id' => $userX->getId(),
+            'avatar' => $userX->getAvatar(),
+            'nick_name' => $userX->getNickname(),
+        ]);
+
+        $provedor = $user->providers()->firstOrCreate(
+            [
+                'email' => $userX->getEmail(),
+                'provider' => 'google',
+            ],
+            [
+                'name' => $userX->getName(),
+                'provider_id' => $userX->getId(),
+                'avatar' => $userX->getAvatar(),
+                'nick_name' => $userX->getNickname(),
+            ]
+        );
+
+        auth()->login($user);
+
+        return redirect()->to('/dashboard');
+    }
 }
