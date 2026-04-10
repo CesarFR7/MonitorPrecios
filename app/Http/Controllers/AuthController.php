@@ -18,7 +18,7 @@ class AuthController extends Controller
 
     public function callback()
     {
-        $userFacebook = Socialite::driver('facebook')->user();
+        $userFacebook = Socialite::driver('facebook')->stateless()->user();
 
         $user = User::updateOrCreate([
             'email' => $userFacebook->getEmail(),
