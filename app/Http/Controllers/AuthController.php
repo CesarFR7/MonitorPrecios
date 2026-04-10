@@ -18,7 +18,7 @@ class AuthController extends Controller
 
     public function callback()
     {
-        $userFacebook = Socialite::driver('facebook')->user();
+        $userFacebook = Socialite::driver('facebook')->stateless()->user();
 
         $user = User::updateOrCreate([
             'email' => $userFacebook->getEmail(),
@@ -79,6 +79,44 @@ class AuthController extends Controller
                 'provider_id' => $userGoogle->getId(),
                 'avatar' => $userGoogle->getAvatar(),
                 'nick_name' => $userGoogle->getNickname(),
+            ]
+        );
+
+        auth()->login($user);
+
+        return redirect()->to('/dashboard');
+    }
+
+    public function x_redirect()
+    {
+        return Socialite::driver('x')->redirect();
+    }
+
+
+    public function x_callback()
+    {
+        $userX = Socialite::driver('x')->stateless()->user();
+
+        $user = User::updateOrCreate([
+            'email' => $userX->getEmail(),
+        ], [
+            'name' => $userX->getName(),
+            'password' => Hash::make(Str::password(12)),
+            'provider_id' => $userX->getId(),
+            'avatar' => $userX->getAvatar(),
+            'nick_name' => $userX->getNickname(),
+        ]);
+
+        $provedor = $user->providers()->firstOrCreate(
+            [
+                'email' => $userX->getEmail(),
+                'provider' => 'google',
+            ],
+            [
+                'name' => $userX->getName(),
+                'provider_id' => $userX->getId(),
+                'avatar' => $userX->getAvatar(),
+                'nick_name' => $userX->getNickname(),
             ]
         );
 

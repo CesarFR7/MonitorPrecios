@@ -32,8 +32,11 @@
 
             <a href="{{route('auth.google_redirect')}}"
                 class="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded block text-center">
-                <!-- <i class="fa-brands fa-square-google-plus"></i> -->
                 <i class="fa-brands fa-google-plus-g margin: 0 200px 0 0 "></i>&nbsp; Iniciar sesión con Google
+            </a>
+            <a href="{{route('auth.x_redirect')}}"
+                class="mt-4 bg-neutral-800 hover:bg-neutral-600 text-white font-bold py-2 px-4 rounded block text-center">
+                <i class="fa-brands fa-x-twitter"></i></i>&nbsp; Iniciar sesión con x.com
             </a>
 
             <div class="block mt-4">

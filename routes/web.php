@@ -24,3 +24,6 @@ Route::get('/auth/callback', [AuthController::class, 'callback'])->name('auth.ca
 
 Route::get('/auth/google/redirect', [AuthController::class, 'google_redirect'])->name('auth.google_redirect');
 Route::get('/auth/google/callback', [AuthController::class, 'google_callback'])->name('auth.google_callback');
+
+Route::get('/auth/x/redirect', [AuthController::class, 'x_redirect'])->name('auth.x_redirect');
+Route::get('/auth/x/callback', [AuthController::class, 'x_callback'])->name('auth.x_callback');
