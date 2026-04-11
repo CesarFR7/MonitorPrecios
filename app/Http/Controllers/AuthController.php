@@ -173,27 +173,28 @@ class AuthController extends Controller
     public function github_callback()
     {
         $userGitHub = Socialite::driver('github')->stateless()->user();
-
+        // dd($userGitHub);
         $user = User::updateOrCreate([
-            'email' => $userGitHub->getEmail(),
+            'nick_name' => $userGitHub->getNickname(),
         ], [
-            'name' => $userGitHub->getName(),
+            'email' => ($userGitHub->getEmail() != null) ? $userGitHub->getEmail() : '',
+            'name' => $userGitHub->getName() != null ? $userGitHub->getName() : $userGitHub->getNickname(),
             'password' => Hash::make(Str::password(12)),
             'provider_id' => $userGitHub->getId(),
             'avatar' => $userGitHub->getAvatar(),
-            'nick_name' => $userGitHub->getNickname(),
         ]);
 
         $provedor = $user->providers()->firstOrCreate(
             [
-                'email' => $userGitHub->getEmail(),
+                'nick_name' => $userGitHub->getNickname(),
                 'provider' => 'github',
             ],
             [
-                'name' => $userGitHub->getName(),
+                'email' => ($userGitHub->getEmail() != null) ? $userGitHub->getEmail() : '',
+                'name' => $userGitHub->getName() != null ? $userGitHub->getName() : $userGitHub->getNickname(),
                 'provider_id' => $userGitHub->getId(),
                 'avatar' => $userGitHub->getAvatar(),
-                'nick_name' => $userGitHub->getNickname(),
+
             ]
         );
 
