@@ -163,4 +163,43 @@ class AuthController extends Controller
 
         return redirect()->to('/dashboard');
     }
+
+    public function github_redirect()
+    {
+        return Socialite::driver('github')->redirect();
+    }
+
+
+    public function github_callback()
+    {
+        $userGitHub = Socialite::driver('github')->stateless()->user();
+        // dd($userGitHub);
+        $user = User::updateOrCreate([
+            'nick_name' => $userGitHub->getNickname(),
+        ], [
+            'email' => ($userGitHub->getEmail() != null) ? $userGitHub->getEmail() : '',
+            'name' => $userGitHub->getName() != null ? $userGitHub->getName() : $userGitHub->getNickname(),
+            'password' => Hash::make(Str::password(12)),
+            'provider_id' => $userGitHub->getId(),
+            'avatar' => $userGitHub->getAvatar(),
+        ]);
+
+        $provedor = $user->providers()->firstOrCreate(
+            [
+                'nick_name' => $userGitHub->getNickname(),
+                'provider' => 'github',
+            ],
+            [
+                'email' => ($userGitHub->getEmail() != null) ? $userGitHub->getEmail() : '',
+                'name' => $userGitHub->getName() != null ? $userGitHub->getName() : $userGitHub->getNickname(),
+                'provider_id' => $userGitHub->getId(),
+                'avatar' => $userGitHub->getAvatar(),
+
+            ]
+        );
+
+        auth()->login($user);
+
+        return redirect()->to('/dashboard');
+    }
 }

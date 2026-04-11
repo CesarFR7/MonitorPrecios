@@ -30,3 +30,6 @@ Route::get('/auth/x/callback', [AuthController::class, 'x_callback'])->name('aut
 
 Route::get('/auth/linkedin/redirect', [AuthController::class, 'linkedin_redirect'])->name('auth.linkedin_redirect');
 Route::get('/auth/linkedin/callback', [AuthController::class, 'linkedin_callback'])->name('auth.linkedin_callback');
+
+Route::get('/auth/github/redirect', [AuthController::class, 'github_redirect'])->name('auth.github_redirect');
+Route::get('/auth/github/callback', [AuthController::class, 'github_callback'])->name('auth.github_callback');

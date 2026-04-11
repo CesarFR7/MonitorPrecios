@@ -42,6 +42,10 @@
                 class="mt-4 bg-sky-800 hover:bg-sky-950 text-white font-bold py-2 px-4 rounded block text-center">
                 <i class="fa-brands fa-linkedin-in"></i>&nbsp; Iniciar sesión con linkedin
             </a>
+            <a href="{{route('auth.github_redirect')}}"
+                class="mt-4 bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded block text-center">
+                <i class="fa-brands fa-github"></i>&nbsp; Iniciar sesión con github
+            </a>
 
             <div class="block mt-4">
                 <label for="remember_me" class="flex items-center">
