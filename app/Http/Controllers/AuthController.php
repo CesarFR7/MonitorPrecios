@@ -128,13 +128,13 @@ class AuthController extends Controller
 
     public function linkedin_redirect()
     {
-        return Socialite::driver('linkedin')->redirect();
+        return Socialite::driver('linkedin-openid')->redirect();
     }
 
 
     public function linkedin_callback()
     {
-        $userLinkedin = Socialite::driver('linkedin')->stateless()->user();
+        $userLinkedin = Socialite::driver('linkedin-openid')->stateless()->user();
 
         $user = User::updateOrCreate([
             'email' => $userLinkedin->getEmail(),
@@ -149,7 +149,7 @@ class AuthController extends Controller
         $provedor = $user->providers()->firstOrCreate(
             [
                 'email' => $userLinkedin->getEmail(),
-                'provider' => 'google',
+                'provider' => 'linkedin',
             ],
             [
                 'name' => $userLinkedin->getName(),

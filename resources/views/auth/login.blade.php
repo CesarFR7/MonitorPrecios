@@ -36,7 +36,11 @@
             </a>
             <a href="{{route('auth.x_redirect')}}"
                 class="mt-4 bg-neutral-800 hover:bg-neutral-600 text-white font-bold py-2 px-4 rounded block text-center">
-                <i class="fa-brands fa-x-twitter"></i></i>&nbsp; Iniciar sesión con x.com
+                <i class="fa-brands fa-x-twitter"></i>&nbsp; Iniciar sesión con x.com
+            </a>
+            <a href="{{route('auth.linkedin_redirect')}}"
+                class="mt-4 bg-sky-800 hover:bg-sky-950 text-white font-bold py-2 px-4 rounded block text-center">
+                <i class="fa-brands fa-linkedin-in"></i>&nbsp; Iniciar sesión con linkedin
             </a>
 
             <div class="block mt-4">
