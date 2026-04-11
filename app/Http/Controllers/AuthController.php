@@ -124,4 +124,43 @@ class AuthController extends Controller
 
         return redirect()->to('/dashboard');
     }
+
+
+    public function linkedin_redirect()
+    {
+        return Socialite::driver('linkedin-openid')->redirect();
+    }
+
+
+    public function linkedin_callback()
+    {
+        $userLinkedin = Socialite::driver('linkedin-openid')->stateless()->user();
+
+        $user = User::updateOrCreate([
+            'email' => $userLinkedin->getEmail(),
+        ], [
+            'name' => $userLinkedin->getName(),
+            'password' => Hash::make(Str::password(12)),
+            'provider_id' => $userLinkedin->getId(),
+            'avatar' => $userLinkedin->getAvatar(),
+            'nick_name' => $userLinkedin->getNickname(),
+        ]);
+
+        $provedor = $user->providers()->firstOrCreate(
+            [
+                'email' => $userLinkedin->getEmail(),
+                'provider' => 'linkedin',
+            ],
+            [
+                'name' => $userLinkedin->getName(),
+                'provider_id' => $userLinkedin->getId(),
+                'avatar' => $userLinkedin->getAvatar(),
+                'nick_name' => $userLinkedin->getNickname(),
+            ]
+        );
+
+        auth()->login($user);
+
+        return redirect()->to('/dashboard');
+    }
 }
