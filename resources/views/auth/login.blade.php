@@ -25,24 +25,24 @@
                 <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
             </div>
 
-            <a href="{{route('auth.redirect')}}"
+            <a href="{{route('auth.redirect', ['provider' => 'facebook'])}}"
                 class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded block text-center">
                 <i class="fa-brands fa-facebook-f"></i>&nbsp; Iniciar sesión con Facebook
             </a>
 
-            <a href="{{route('auth.google_redirect')}}"
+            <a href="{{route('auth.redirect', ['provider' => 'google'])}}"
                 class="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded block text-center">
                 <i class="fa-brands fa-google-plus-g margin: 0 200px 0 0 "></i>&nbsp; Iniciar sesión con Google
             </a>
-            <a href="{{route('auth.x_redirect')}}"
+            <a href="{{route('auth.redirect', ['provider' => 'x']}}"
                 class="mt-4 bg-neutral-800 hover:bg-neutral-600 text-white font-bold py-2 px-4 rounded block text-center">
                 <i class="fa-brands fa-x-twitter"></i>&nbsp; Iniciar sesión con x.com
             </a>
-            <a href="{{route('auth.linkedin_redirect')}}"
+            <a href="{{route('auth.redirect', ['provider' => 'linkedin-openid']}}"
                 class="mt-4 bg-sky-800 hover:bg-sky-950 text-white font-bold py-2 px-4 rounded block text-center">
                 <i class="fa-brands fa-linkedin-in"></i>&nbsp; Iniciar sesión con linkedin
             </a>
-            <a href="{{route('auth.github_redirect')}}"
+            <a href="{{route('auth.redirect', ['provider' => 'github']}}"
                 class="mt-4 bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded block text-center">
                 <i class="fa-brands fa-github"></i>&nbsp; Iniciar sesión con github
             </a>
