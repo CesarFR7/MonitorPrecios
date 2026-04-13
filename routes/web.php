@@ -9,6 +9,15 @@ Route::get('/', function () {
 });
 
 
-Route::get('/auth/redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
 
-Route::get('/auth/callback', [AuthController::class, 'callback'])->name('auth.callback');
+Route::get('/auth/{provider}/redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
+Route::get('/auth/{provider}/callback', [AuthController::class, 'callback'])->name('auth.callback');
