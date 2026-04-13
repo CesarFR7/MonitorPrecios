@@ -10,193 +10,29 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    public function redirect()
+    public function redirect($provider)
     {
-        return Socialite::driver('facebook')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
 
-    public function callback()
+    public function callback($provider)
     {
-        $userFacebook = Socialite::driver('facebook')->stateless()->user();
+
+        $userProvider = Socialite::driver($provider)->stateless()->user();
 
         $user = User::updateOrCreate([
-            'email' => $userFacebook->getEmail(),
+            'provider_id' => $userProvider->getId(),
         ], [
-            'name' => $userFacebook->getName(),
+            'name' => $userProvider->getName() ? $userProvider->getName() : $userProvider->getNickname(),
+            'email' => $userProvider->getEmail() ? $userProvider->getEmail() : '',
             'password' => Hash::make(Str::password(12)),
-            'provider_id' => $userFacebook->getId(),
-            'avatar' => $userFacebook->getAvatar(),
-            'nick_name' => $userFacebook->getNickname(),
+            'provider' => $provider,
+            'provider_id' => $userProvider->getId(),
+            'avatar' => $userProvider->getAvatar(),
+            'nick_name' => $userProvider->getNickname(),
         ]);
 
-        // dd($user);
-
-        $provedor = $user->providers()->firstOrCreate(
-            [
-                'email' => $userFacebook->getEmail(),
-                'provider' => 'Facebook',
-            ],
-            [
-                'name' => $userFacebook->getName(),
-                'provider_id' => $userFacebook->getId(),
-                'avatar' => $userFacebook->getAvatar(),
-                'nick_name' => $userFacebook->getNickname(),
-            ]
-        );
-
-        auth()->login($user);
-
-        return redirect()->to('/dashboard');
-    }
-
-    public function google_redirect()
-    {
-        return Socialite::driver('google')->redirect();
-    }
-
-    public function google_callback()
-    {
-        $userGoogle = Socialite::driver('google')->stateless()->user();
-
-        $user = User::updateOrCreate([
-            'email' => $userGoogle->getEmail(),
-        ], [
-            'name' => $userGoogle->getName(),
-            'password' => Hash::make(Str::password(12)),
-            'provider_id' => $userGoogle->getId(),
-            'avatar' => $userGoogle->getAvatar(),
-            'nick_name' => $userGoogle->getNickname(),
-        ]);
-
-        $provedor = $user->providers()->firstOrCreate(
-            [
-                'email' => $userGoogle->getEmail(),
-                'provider' => 'google',
-            ],
-            [
-                'name' => $userGoogle->getName(),
-                'provider_id' => $userGoogle->getId(),
-                'avatar' => $userGoogle->getAvatar(),
-                'nick_name' => $userGoogle->getNickname(),
-            ]
-        );
-
-        auth()->login($user);
-
-        return redirect()->to('/dashboard');
-    }
-
-    public function x_redirect()
-    {
-        return Socialite::driver('x')->redirect();
-    }
-
-
-    public function x_callback()
-    {
-        $userX = Socialite::driver('x')->stateless()->user();
-
-        $user = User::updateOrCreate([
-            'email' => $userX->getEmail(),
-        ], [
-            'name' => $userX->getName(),
-            'password' => Hash::make(Str::password(12)),
-            'provider_id' => $userX->getId(),
-            'avatar' => $userX->getAvatar(),
-            'nick_name' => $userX->getNickname(),
-        ]);
-
-        $provedor = $user->providers()->firstOrCreate(
-            [
-                'email' => $userX->getEmail(),
-                'provider' => 'google',
-            ],
-            [
-                'name' => $userX->getName(),
-                'provider_id' => $userX->getId(),
-                'avatar' => $userX->getAvatar(),
-                'nick_name' => $userX->getNickname(),
-            ]
-        );
-
-        auth()->login($user);
-
-        return redirect()->to('/dashboard');
-    }
-
-
-    public function linkedin_redirect()
-    {
-        return Socialite::driver('linkedin-openid')->redirect();
-    }
-
-
-    public function linkedin_callback()
-    {
-        $userLinkedin = Socialite::driver('linkedin-openid')->stateless()->user();
-
-        $user = User::updateOrCreate([
-            'email' => $userLinkedin->getEmail(),
-        ], [
-            'name' => $userLinkedin->getName(),
-            'password' => Hash::make(Str::password(12)),
-            'provider_id' => $userLinkedin->getId(),
-            'avatar' => $userLinkedin->getAvatar(),
-            'nick_name' => $userLinkedin->getNickname(),
-        ]);
-
-        $provedor = $user->providers()->firstOrCreate(
-            [
-                'email' => $userLinkedin->getEmail(),
-                'provider' => 'linkedin',
-            ],
-            [
-                'name' => $userLinkedin->getName(),
-                'provider_id' => $userLinkedin->getId(),
-                'avatar' => $userLinkedin->getAvatar(),
-                'nick_name' => $userLinkedin->getNickname(),
-            ]
-        );
-
-        auth()->login($user);
-
-        return redirect()->to('/dashboard');
-    }
-
-    public function github_redirect()
-    {
-        return Socialite::driver('github')->redirect();
-    }
-
-
-    public function github_callback()
-    {
-        $userGitHub = Socialite::driver('github')->stateless()->user();
-        // dd($userGitHub);
-        $user = User::updateOrCreate([
-            'nick_name' => $userGitHub->getNickname(),
-        ], [
-            'email' => ($userGitHub->getEmail() != null) ? $userGitHub->getEmail() : '',
-            'name' => $userGitHub->getName() != null ? $userGitHub->getName() : $userGitHub->getNickname(),
-            'password' => Hash::make(Str::password(12)),
-            'provider_id' => $userGitHub->getId(),
-            'avatar' => $userGitHub->getAvatar(),
-        ]);
-
-        $provedor = $user->providers()->firstOrCreate(
-            [
-                'nick_name' => $userGitHub->getNickname(),
-                'provider' => 'github',
-            ],
-            [
-                'email' => ($userGitHub->getEmail() != null) ? $userGitHub->getEmail() : '',
-                'name' => $userGitHub->getName() != null ? $userGitHub->getName() : $userGitHub->getNickname(),
-                'provider_id' => $userGitHub->getId(),
-                'avatar' => $userGitHub->getAvatar(),
-
-            ]
-        );
 
         auth()->login($user);
 
